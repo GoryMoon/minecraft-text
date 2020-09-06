@@ -1,0 +1,46 @@
+name: Continuous Integration
+on: 
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build:
+    name: Build typescript
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14'
+
+    - run: yarn install
+
+    - name: Compile code
+      run: yarn build
+
+
+  test:
+    name: Test and Coverage
+    needs: build
+    runs-on: 'ubuntu-latest'
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+
+    - run: yarn install
+
+    - name: Run Linter
+      run: yarn lint
+
+    - name: Run tests
+      run: yarn test
+
+    - name: Upload Coverage
+      uses: codecov/codecov-action@v1
