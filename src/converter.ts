@@ -1,9 +1,10 @@
 import { BaseComponent, IComponent } from './component';
 import { IParser } from './parser';
+import { IPrinter } from './printer';
 import { TextParser } from './text/textParser';
+import { TextPrinter } from './text/textPrinter';
 
-type Colors = {
-  default: string;
+type Styles = {
   black: string;
   darkBlue: string;
   darkGreen: string;
@@ -21,6 +22,11 @@ type Colors = {
   yellow: string;
   white: string;
   minecoinGold: string;
+  bold: string;
+  italic: string;
+  underlined: string;
+  strikethrough: string;
+  obfuscated: string;
 };
 
 type Options = {
@@ -28,11 +34,14 @@ type Options = {
   useClasses: boolean;
   classPrefix: string;
   parsers: Map<string, IParser>;
-  colors: Colors;
-  classes: Colors;
+  printers: Map<string, IPrinter>;
+  styles: Styles;
+  classes: Styles;
+  setClassSuffix: string;
+  unsetClassSuffix: string;
 };
 
-const boolVals = [
+const boolValues = [
   'bold',
   'italic',
   'underlined',
@@ -55,8 +64,8 @@ export class Converter {
         useClasses: false,
         classPrefix: 'mc-',
         parsers: new Map(),
-        colors: {
-          default: '#000000',
+        printers: new Map(),
+        styles: {
           black: '#000000',
           darkBlue: '#0000AA',
           darkGreen: '#00AA00',
@@ -74,9 +83,13 @@ export class Converter {
           yellow: '#FFFF55',
           white: '#FFFFFF',
           minecoinGold: '#DDD605',
+          bold: 'bold',
+          italic: 'italic',
+          underlined: 'underline',
+          strikethrough: 'line-through',
+          obfuscated: '',
         },
         classes: {
-          default: 'default',
           black: 'black',
           darkBlue: 'dark-blue',
           darkGreen: 'dark-green',
@@ -94,7 +107,14 @@ export class Converter {
           yellow: 'yellow',
           white: 'white',
           minecoinGold: 'minecoin-gold',
+          bold: 'bold',
+          italic: 'italic',
+          underlined: 'underlined',
+          strikethrough: 'strikethrough',
+          obfuscated: 'obfuscated',
         },
+        setClassSuffix: '-set',
+        unsetClassSuffix: '-unset',
       },
       options
     );
@@ -103,12 +123,38 @@ export class Converter {
       opt.parsers.set('text', new TextParser());
     }
 
+    if (!opt.printers.has('text')) {
+      opt.printers.set('text', new TextPrinter());
+    }
+
     return opt;
   }
 
+  /**
+   * Reviver to transform for the JSON.parse method
+   * Replaces boolean string values with boolean primitives
+   */
   private jsonReviver(key: string, val: any): any {
-    if (boolVals.includes(key)) {
+    if (boolValues.includes(key)) {
       return val === 'true';
+    }
+    return val;
+  }
+
+  /**
+   * Replacer to transform for the JSON.stringify method
+   * Replaces boolean to string literals
+   * Removes default values from the json
+   */
+  private jsonReplacer(key: string, val: any): any {
+    if (boolValues.includes(key)) {
+      return val ? String(val) : undefined;
+    }
+    if (
+      (key === 'color' && val === 'default') ||
+      ((key === 'insertion' || key === 'extra') && val.length <= 0)
+    ) {
+      return undefined;
     }
     return val;
   }
@@ -149,5 +195,39 @@ export class Converter {
       return this.defaultTextParser.parse(input);
     }
     throw new Error(`Trying to parse invalid data: ${input}`);
+  }
+
+  public toString(comp: IComponent): string {
+    let p;
+    for (const printer of this.options.printers.values()) {
+      if (printer.canPrint(comp)) {
+        p = printer;
+        break;
+      }
+    }
+    let val = p !== undefined ? p.toString(comp, this) : '';
+    if (!this.options.newline) {
+      val = val.replace('\n', ' ');
+    }
+    return val;
+  }
+
+  public toHTML(comp: IComponent): string {
+    let p;
+    for (const printer of this.options.printers.values()) {
+      if (printer.canPrint(comp)) {
+        p = printer;
+        break;
+      }
+    }
+    let val = p !== undefined ? p.toHTML(comp, this) : '';
+    if (!this.options.newline) {
+      val = val.replace('\n', '<br>');
+    }
+    return val;
+  }
+
+  public toJSON(comp: IComponent): string {
+    return JSON.stringify(comp, this.jsonReplacer);
   }
 }

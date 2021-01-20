@@ -1,4 +1,5 @@
 import { Converter, ITextComponent, TextParser } from '../index';
+import { TextPrinter } from '../text/textPrinter';
 
 test('Converter default options', () => {
   const converter = new Converter();
@@ -8,24 +9,31 @@ test('Converter default options', () => {
   expect(converter.options.parsers.size).toBe(1);
   expect(converter.options.parsers).toBeInstanceOf(Map);
   expect(converter.options.parsers.get('text')).toBeInstanceOf(TextParser);
+  expect(converter.options.setClassSuffix).toBe('-set');
+  expect(converter.options.unsetClassSuffix).toBe('-unset');
 
-  expect(converter.options.colors.black).toBe('#000000');
-  expect(converter.options.colors.darkBlue).toBe('#0000AA');
-  expect(converter.options.colors.darkGreen).toBe('#00AA00');
-  expect(converter.options.colors.darkAqua).toBe('#00AAAA');
-  expect(converter.options.colors.darkRed).toBe('#AA0000');
-  expect(converter.options.colors.darkPurple).toBe('#AA00AA');
-  expect(converter.options.colors.gold).toBe('#FFAA00');
-  expect(converter.options.colors.gray).toBe('#AAAAAA');
-  expect(converter.options.colors.darkGray).toBe('#555555');
-  expect(converter.options.colors.blue).toBe('#5555FF');
-  expect(converter.options.colors.green).toBe('#55FF55');
-  expect(converter.options.colors.aqua).toBe('#55FFFF');
-  expect(converter.options.colors.red).toBe('#FF5555');
-  expect(converter.options.colors.lightPuple).toBe('#FF55FF');
-  expect(converter.options.colors.yellow).toBe('#FFFF55');
-  expect(converter.options.colors.white).toBe('#FFFFFF');
-  expect(converter.options.colors.minecoinGold).toBe('#DDD605');
+  expect(converter.options.styles.black).toBe('#000000');
+  expect(converter.options.styles.darkBlue).toBe('#0000AA');
+  expect(converter.options.styles.darkGreen).toBe('#00AA00');
+  expect(converter.options.styles.darkAqua).toBe('#00AAAA');
+  expect(converter.options.styles.darkRed).toBe('#AA0000');
+  expect(converter.options.styles.darkPurple).toBe('#AA00AA');
+  expect(converter.options.styles.gold).toBe('#FFAA00');
+  expect(converter.options.styles.gray).toBe('#AAAAAA');
+  expect(converter.options.styles.darkGray).toBe('#555555');
+  expect(converter.options.styles.blue).toBe('#5555FF');
+  expect(converter.options.styles.green).toBe('#55FF55');
+  expect(converter.options.styles.aqua).toBe('#55FFFF');
+  expect(converter.options.styles.red).toBe('#FF5555');
+  expect(converter.options.styles.lightPuple).toBe('#FF55FF');
+  expect(converter.options.styles.yellow).toBe('#FFFF55');
+  expect(converter.options.styles.white).toBe('#FFFFFF');
+  expect(converter.options.styles.minecoinGold).toBe('#DDD605');
+  expect(converter.options.styles.bold).toBe('bold');
+  expect(converter.options.styles.italic).toBe('italic');
+  expect(converter.options.styles.underlined).toBe('underline');
+  expect(converter.options.styles.strikethrough).toBe('line-through');
+  expect(converter.options.styles.obfuscated).toBe('');
 
   expect(converter.options.classes.black).toBe('black');
   expect(converter.options.classes.darkBlue).toBe('dark-blue');
@@ -44,9 +52,15 @@ test('Converter default options', () => {
   expect(converter.options.classes.yellow).toBe('yellow');
   expect(converter.options.classes.white).toBe('white');
   expect(converter.options.classes.minecoinGold).toBe('minecoin-gold');
+  expect(converter.options.classes.bold).toBe('bold');
+  expect(converter.options.classes.italic).toBe('italic');
+  expect(converter.options.classes.underlined).toBe('underlined');
+  expect(converter.options.classes.strikethrough).toBe('strikethrough');
+  expect(converter.options.classes.obfuscated).toBe('obfuscated');
 });
 
 class CustomTextParser extends TextParser {}
+class CustomTextPrinter extends TextPrinter {}
 
 test('Converter custom text parser', () => {
   const parsers = new Map();
@@ -58,6 +72,19 @@ test('Converter custom text parser', () => {
   expect(converter.options.parsers.get('text')).toBeInstanceOf(TextParser);
   expect(converter.options.parsers.get('text')).toBeInstanceOf(
     CustomTextParser
+  );
+});
+
+test('Converter custom text printer', () => {
+  const printers = new Map();
+  printers.set('text', new CustomTextPrinter());
+  const converter = new Converter({ printers });
+
+  expect(converter.options.printers.size).toBe(1);
+  expect(converter.options.printers).toBeInstanceOf(Map);
+  expect(converter.options.printers.get('text')).toBeInstanceOf(TextPrinter);
+  expect(converter.options.printers.get('text')).toBeInstanceOf(
+    CustomTextPrinter
   );
 });
 
@@ -158,4 +185,184 @@ test('Parse invalid input', () => {
   expect(() => {
     converter.parse(() => {});
   }).toThrow('Trying to parse invalid data:');
+});
+
+test('Basic ToJSON output', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test"}');
+  expect(converter.toJSON(comp)).toBe('{"text":"Test"}');
+});
+
+test('ToJSON output, with styles', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "bold": "true"}');
+  expect(converter.toJSON(comp)).toBe('{"bold":"true","text":"Test"}');
+});
+
+test('Single ToString output', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test"}');
+  expect(converter.toString(comp)).toBe('Test');
+});
+
+test('Multiple ToString output', () => {
+  const converter = new Converter();
+  const comp = converter.parse(
+    '[{"text": "Hello"}, {"text": " World"}, {"text": "!"}]'
+  );
+  expect(converter.toString(comp)).toBe('Hello World!');
+});
+
+test('ToString output, with undefined extra', () => {
+  const converter = new Converter();
+  const comp = {} as ITextComponent;
+  comp.text = 'Test';
+  expect(converter.toString(comp)).toBe('Test');
+});
+
+test('Basic ToString output', () => {
+  const converter = new Converter();
+  const comp = converter.parse('["Hello ", "World", "!"]');
+  expect(converter.toString(comp)).toBe('Hello World!');
+});
+
+test('Basic ToString output, newline false', () => {
+  const converter = new Converter();
+  const comp = converter.parse('["Hello", "\\n", "World", "!"]');
+  expect(converter.toString(comp)).toBe('Hello World!');
+});
+
+test('Basic ToString output, newline false', () => {
+  const converter = new Converter({ newline: true });
+  const comp = converter.parse('["Hello", "\\n", "World", "!"]');
+  expect(converter.toString(comp)).toBe('Hello\nWorld!');
+});
+
+test('ToString output, with styles', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "bold": "true"}');
+  expect(converter.toString(comp)).toBe('Test');
+});
+
+test('Single ToHTML output', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "color": "black"}');
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="color: #000000;">Test</span>'
+  );
+});
+
+test('Extra ToHTML output', () => {
+  const converter = new Converter();
+  const comp = converter.parse(
+    '{"text": "Hello", "color": "black", "extra": [{"text": " World!"}]}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="color: #000000;">Hello<span> World!</span></span>'
+  );
+});
+
+test('ToHTML output, with undefined extra', () => {
+  const converter = new Converter();
+  const comp = {} as ITextComponent;
+  comp.text = 'Test';
+  expect(converter.toHTML(comp)).toBe('<span>Test</span>');
+});
+
+test('Basic ToHTML output, custom color', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "color": "#424242"}');
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="color: #424242;">Test</span>'
+  );
+});
+
+test('ToHTML output set', () => {
+  const converter = new Converter();
+  const comp = converter.parse(
+    '{"text": "Test", "color": "black", "bold": "true", "italic": "true", "underlined": "true", "strikethrough": "true"}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="font-weight: bold; font-style: italic; text-decoration: underline line-through; color: #000000;">Test</span>'
+  );
+});
+
+test('ToHTML output unset', () => {
+  const converter = new Converter();
+  const comp = converter.parse(
+    '{"text": "Test", "bold": "false", "italic": "false", "underlined": "false", "strikethrough": "false"}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="font-weight: normal; font-style: normal; text-decoration: none;">Test</span>'
+  );
+});
+
+test('Basic ToHTML output, invalid color', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "color": "tomato"}');
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="color: #000000;">Test</span>'
+  );
+});
+
+test('Basic ToHTML output, classes', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse('{"text": "Test", "color": "black"}');
+  expect(converter.toHTML(comp)).toBe('<span class="mc-black">Test</span>');
+});
+
+test('ToHTML output set, classes', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse(
+    '{"text": "Test", "color": "black", "bold": "true", "italic": "true", "underlined": "true", "strikethrough": "true"}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span class="mc-bold-set mc-italic-set mc-underlined-set mc-strikethrough-set mc-black">Test</span>'
+  );
+});
+
+test('ToHTML output unset, classes', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse(
+    '{"text": "Test", "color": "black", "bold": "false", "italic": "false", "underlined": "false", "strikethrough": "false"}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span class="mc-bold-unset mc-italic-unset mc-underlined-unset mc-strikethrough-unset mc-black">Test</span>'
+  );
+});
+
+test('Basic ToHTML output, custom color classes', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse('{"text": "Test", "color": "#424242"}');
+  expect(converter.toHTML(comp)).toBe('<span>Test</span>');
+});
+
+test('Basic ToHTML output, invalid color classes', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse('{"text": "Test", "color": "tomato"}');
+  expect(converter.toHTML(comp)).toBe('<span class="mc-black">Test</span>');
+});
+
+test('Basic ToHTML output, newline false', () => {
+  const converter = new Converter();
+  const comp = converter.parse('["Hello ", "World", "!"]');
+  expect(converter.toHTML(comp)).toBe(
+    '<span>Hello <span>World</span><span>!</span></span>'
+  );
+});
+
+test('Basic ToHTML output, newline false', () => {
+  const converter = new Converter();
+  const comp = converter.parse('["Hello", "\\n", "World", "!"]');
+  expect(converter.toHTML(comp)).toBe(
+    '<span>Hello<span><br></span><span>World</span><span>!</span></span>'
+  );
+});
+
+test('Basic ToHTML output, newline', () => {
+  const converter = new Converter({ newline: true });
+  const comp = converter.parse('["Hello", "\\n", "World", "!"]');
+  expect(converter.toHTML(comp)).toBe(
+    '<span>Hello<span>\n</span><span>World</span><span>!</span></span>'
+  );
 });

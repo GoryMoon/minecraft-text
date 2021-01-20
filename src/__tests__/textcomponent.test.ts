@@ -1,4 +1,6 @@
+import { IComponent } from '../component';
 import { ITextComponent, TextParser } from '../index';
+import { TextPrinter } from '../text/textPrinter';
 
 test('Create new component', () => {
   const comp: ITextComponent = {
@@ -61,4 +63,18 @@ test('Parse null input', () => {
 
   comp = parser.parse(undefined);
   expect((comp as ITextComponent).text).toBe('');
+});
+
+test('Can print', () => {
+  const printer = new TextPrinter();
+  const comp: ITextComponent = {
+    text: 'Test',
+  };
+  expect(printer.canPrint(comp)).toBe(true);
+});
+
+test('Can not print', () => {
+  const printer = new TextPrinter();
+  const comp: IComponent = {};
+  expect(printer.canPrint(comp)).toBe(false);
 });

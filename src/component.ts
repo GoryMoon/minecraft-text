@@ -10,22 +10,22 @@ export interface IComponent {
 }
 
 export class BaseComponent implements IComponent {
-  bold: boolean;
-  italic: boolean;
-  underlined: boolean;
-  strikethrough: boolean;
-  obfuscated: boolean;
-  color: string;
+  bold?: boolean;
+  italic?: boolean;
+  underlined?: boolean;
+  strikethrough?: boolean;
+  obfuscated?: boolean;
+  color?: string;
   insertion: string;
   extra: IComponent[];
 
   constructor({
-    bold = false,
-    italic = false,
-    underlined = false,
-    strikethrough = false,
-    obfuscated = false,
-    color = 'white',
+    bold,
+    italic,
+    underlined,
+    strikethrough,
+    obfuscated,
+    color,
     insertion = '',
     extra = [],
   }: IComponent) {
