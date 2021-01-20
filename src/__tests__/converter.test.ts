@@ -1,5 +1,4 @@
-import { Converter, ITextComponent, TextParser } from '../index';
-import { TextPrinter } from '../text/textPrinter';
+import { Converter, ITextComponent, TextParser, TextPrinter, TranslateParser } from '../index';
 
 test('Converter default options', () => {
   const converter = new Converter();
@@ -365,4 +364,13 @@ test('Basic ToHTML output, newline', () => {
   expect(converter.toHTML(comp)).toBe(
     '<span>Hello<span>\n</span><span>World</span><span>!</span></span>'
   );
+});
+
+test('Try printing component without supported printer', () => {
+  const parsers = new Map();
+  parsers.set('translate', new TranslateParser());
+  const converter = new Converter({ parsers });
+  const comp = converter.parse('{"translate": "test.test", "bold": "true"}')
+  expect(converter.toString(comp)).toBe('');
+  expect(converter.toHTML(comp)).toBe('');
 });
