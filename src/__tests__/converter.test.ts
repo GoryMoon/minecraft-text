@@ -228,13 +228,13 @@ test('Basic ToString output', () => {
 test('Basic ToString output, newline false', () => {
   const converter = new Converter();
   const comp = converter.parse('["Hello", "\\n", "World", "!"]');
-  expect(converter.toString(comp)).toBe('Hello World!');
+  expect(converter.toString(comp)).toBe('Hello\nWorld!');
 });
 
-test('Basic ToString output, newline false', () => {
+test('Basic ToString output, newline', () => {
   const converter = new Converter({ newline: true });
   const comp = converter.parse('["Hello", "\\n", "World", "!"]');
-  expect(converter.toString(comp)).toBe('Hello\nWorld!');
+  expect(converter.toString(comp)).toBe('Hello World!');
 });
 
 test('ToString output, with styles', () => {
@@ -344,17 +344,9 @@ test('Basic ToHTML output, invalid color classes', () => {
 
 test('Basic ToHTML output, newline false', () => {
   const converter = new Converter();
-  const comp = converter.parse('["Hello ", "World", "!"]');
-  expect(converter.toHTML(comp)).toBe(
-    '<span>Hello <span>World</span><span>!</span></span>'
-  );
-});
-
-test('Basic ToHTML output, newline false', () => {
-  const converter = new Converter();
   const comp = converter.parse('["Hello", "\\n", "World", "!"]');
   expect(converter.toHTML(comp)).toBe(
-    '<span>Hello<span><br></span><span>World</span><span>!</span></span>'
+    '<span>Hello<span>\n</span><span>World</span><span>!</span></span>'
   );
 });
 
@@ -362,7 +354,7 @@ test('Basic ToHTML output, newline', () => {
   const converter = new Converter({ newline: true });
   const comp = converter.parse('["Hello", "\\n", "World", "!"]');
   expect(converter.toHTML(comp)).toBe(
-    '<span>Hello<span>\n</span><span>World</span><span>!</span></span>'
+    '<span>Hello<span><br></span><span>World</span><span>!</span></span>'
   );
 });
 
