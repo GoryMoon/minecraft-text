@@ -46,7 +46,7 @@ export class BaseComponent implements IComponent {
     insertion = '',
     extra = [],
     clickEvent,
-    hoverEvent
+    hoverEvent,
   }: IComponent) {
     (this.bold = bold), (this.italic = italic);
     this.underlined = underlined;

@@ -1,4 +1,5 @@
-import { IComponent, ITextComponent, TextParser, TextPrinter } from '../index';
+import { IComponent } from '..';
+import { ITextComponent, TextParser, TextPrinter } from '../text';
 
 test('Create new component', () => {
   const comp: ITextComponent = {

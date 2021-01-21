@@ -4,6 +4,7 @@ import { buildSpan, IPrinter } from '../printer';
 import { ITextComponent } from './textComponent';
 
 export class TextPrinter implements IPrinter {
+  /** @inheritDoc */
   public toString(comp: IComponent, converter: Converter): string {
     let extra = '';
     if (comp.extra !== undefined) {
@@ -12,6 +13,7 @@ export class TextPrinter implements IPrinter {
     return (comp as ITextComponent).text + extra;
   }
 
+  /** @inheritDoc */
   public toHTML(comp: IComponent, converter: Converter): string {
     let extra = '';
     if (comp.extra !== undefined) {
@@ -20,6 +22,7 @@ export class TextPrinter implements IPrinter {
     return buildSpan(comp, converter, (comp as ITextComponent).text + extra);
   }
 
+  /** @inheritDoc */
   public canPrint(comp: IComponent): boolean {
     return (comp as ITextComponent).text !== undefined;
   }

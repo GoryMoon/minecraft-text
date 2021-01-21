@@ -3,6 +3,7 @@ import { IParser } from '../parser';
 import { ITranslateComponent } from './translateComponent';
 
 export class TranslateParser implements IParser {
+  /** @inheritDoc */
   public parse(json: any): BaseComponent {
     let comp = new BaseComponent({});
     (comp as ITranslateComponent).translate = '';

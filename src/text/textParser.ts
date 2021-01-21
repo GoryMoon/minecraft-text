@@ -3,6 +3,7 @@ import { IParser } from '../parser';
 import { ITextComponent } from './textComponent';
 
 export class TextParser implements IParser {
+  /** @inheritDoc */
   public parse(json: any): BaseComponent {
     let comp = new BaseComponent({});
     (comp as ITextComponent).text = '';
