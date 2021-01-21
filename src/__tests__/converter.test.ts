@@ -1,4 +1,6 @@
-import { Converter, ITextComponent, TextParser, TextPrinter, TranslateParser } from '../index';
+import { Converter } from '..';
+import { ITextComponent, TextParser, TextPrinter } from '../text';
+import { TranslateParser } from '../translate';
 
 test('Converter default options', () => {
   const converter = new Converter();
@@ -362,7 +364,7 @@ test('Try printing component without supported printer', () => {
   const parsers = new Map();
   parsers.set('translate', new TranslateParser());
   const converter = new Converter({ parsers });
-  const comp = converter.parse('{"translate": "test.test", "bold": "true"}')
+  const comp = converter.parse('{"translate": "test.test", "bold": "true"}');
   expect(converter.toString(comp)).toBe('');
   expect(converter.toHTML(comp)).toBe('');
 });

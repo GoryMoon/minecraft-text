@@ -2,11 +2,33 @@ import { IComponent } from './component';
 import { Converter } from './converter';
 
 export interface IPrinter {
+  /**
+   * Returns a plaintext representation of the component
+   * @param comp The component to create a plaintext string from.
+   * @param converter The converter to use for options when creating the plaintext string.
+   */
   toString(comp: IComponent, converter: Converter): string;
+
+  /**
+   * Returns a HTML representation of the component.
+   * @param comp The component to create the HTML from.
+   * @param converter The converter to use for options when creating the HTML.
+   */
   toHTML(comp: IComponent, converter: Converter): string;
+
+  /**
+   * Checks if this printer can print the given component.
+   * @param comp The component to check.
+   */
   canPrint(comp: IComponent): boolean;
 }
 
+/**
+ * Builds a HTML span containing from the provided component
+ * @param comp The component to create the span from.
+ * @param converter The converter to use for options when creating the span.
+ * @param content The content to put into the span
+ */
 export function buildSpan(
   comp: IComponent,
   converter: Converter,

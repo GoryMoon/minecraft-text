@@ -1,4 +1,4 @@
-import { ITranslateComponent, TranslateParser } from '../index';
+import { ITranslateComponent, TranslateParser } from '../translate';
 
 test('Create new component', () => {
   const comp: ITranslateComponent = {
@@ -11,12 +11,10 @@ test('Create new component', () => {
 test('Create new component with replacement value', () => {
   const comp: ITranslateComponent = {
     translate: 'test.test',
-    with: ['Data']
+    with: ['Data'],
   };
   expect(comp.translate).toBe('test.test');
-  expect(comp.with).toEqual([
-    'Data'
-  ]);
+  expect(comp.with).toEqual(['Data']);
 });
 
 test('Create new component with base values', () => {
@@ -49,9 +47,7 @@ test('Parse translate component with replacement value', () => {
     bold: true,
   });
   expect((comp as ITranslateComponent).translate).toBe('test.test');
-  expect((comp as ITranslateComponent).with).toEqual([
-    'Data'
-  ]);
+  expect((comp as ITranslateComponent).with).toEqual(['Data']);
   expect(comp.bold).toBe(true);
 });
 

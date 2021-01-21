@@ -53,6 +53,10 @@ export class Converter {
   public options: Options;
   private readonly defaultTextParser: IParser = new TextParser();
 
+  /**
+   * Creates a new converter object to parse and print text json.
+   * @param options An optional object of options to use when parsing and printing.
+   */
   constructor(options: Partial<Options> = {}) {
     this.options = this.parseOptions(options);
   }
@@ -133,6 +137,8 @@ export class Converter {
   /**
    * Reviver to transform for the JSON.parse method
    * Replaces boolean string values with boolean primitives
+   * @param key
+   * @param val
    */
   private jsonReviver(key: string, val: any): any {
     if (boolValues.includes(key)) {
@@ -145,6 +151,8 @@ export class Converter {
    * Replacer to transform for the JSON.stringify method
    * Replaces boolean to string literals
    * Removes default values from the json
+   * @param key
+   * @param val
    */
   private jsonReplacer(key: string, val: any): any {
     if (boolValues.includes(key)) {
@@ -159,6 +167,12 @@ export class Converter {
     return val;
   }
 
+  /**
+   * Try to parse the input data into a component
+   * Can be a string, array of strings, array of objects, object or primitives.
+   * Any primitives will be parsed as a text component.
+   * @param input The input data to parse.
+   */
   public parse(input: any): BaseComponent {
     if (typeof input === 'string' && input.length > 0) {
       try {
@@ -197,6 +211,10 @@ export class Converter {
     throw new Error(`Trying to parse invalid data: ${input}`);
   }
 
+  /**
+   * Returns a plaintext string representation of the component if there are printers for that component available.
+   * @param comp The component to create the plaintext string from.
+   */
   public toString(comp: IComponent): string {
     let p;
     for (const printer of this.options.printers.values()) {
@@ -212,6 +230,10 @@ export class Converter {
     return val;
   }
 
+  /**
+   * Returns a HTML representation of the component if there are printers for that component available.
+   * @param comp The component to create the HTML from.
+   */
   public toHTML(comp: IComponent): string {
     let p;
     for (const printer of this.options.printers.values()) {
@@ -227,6 +249,10 @@ export class Converter {
     return val;
   }
 
+  /**
+   * Returns a json representation of the component, should be valid minecraft text json.
+   * @param comp The component to create the json from.
+   */
   public toJSON(comp: IComponent): string {
     return JSON.stringify(comp, this.jsonReplacer);
   }
