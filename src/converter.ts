@@ -206,7 +206,7 @@ export class Converter {
       }
     }
     let val = p !== undefined ? p.toString(comp, this) : '';
-    if (!this.options.newline) {
+    if (this.options.newline) {
       val = val.replace('\n', ' ');
     }
     return val;
@@ -221,7 +221,7 @@ export class Converter {
       }
     }
     let val = p !== undefined ? p.toHTML(comp, this) : '';
-    if (!this.options.newline) {
+    if (this.options.newline) {
       val = val.replace('\n', '<br>');
     }
     return val;
