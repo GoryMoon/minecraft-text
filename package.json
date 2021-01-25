@@ -1,5 +1,5 @@
 {
-  "name": "minecraft-text",
+  "name": "@gorymoon/minecraft-text",
   "version": "1.0.0",
   "description": "Wrapper and parser of minecraft text",
   "license": "MIT",
@@ -24,7 +24,10 @@
     "json"
   ],
   "author": "Gustaf Järgren",
-  "repository": "github:GoryMoon/minecraft-text",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoryMoon/minecraft-text"
+  },
   "bugs": "https://github.com/GoryMoon/minecraft-text/issues",
   "homepage": "https://github.com/GoryMoon/minecraft-text",
   "devDependencies": {

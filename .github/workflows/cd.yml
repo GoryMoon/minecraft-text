@@ -1,8 +1,8 @@
 name: Continuous Delivery
-on: 
+on:
   push:
-    branches:
-      - main
+    tags:
+      - v*
 
 jobs:
   build:
@@ -53,53 +53,29 @@ jobs:
 
 
   publish:
-    name: Publish to NPM & GitHub Package Registry
+    name: Publish to GitHub Package Registry
     needs: test
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Check version changes
-      uses: EndBug/version-check@v1
-      id: check
-
-    - name: Version update detected
-      if: steps.check.outputs.changed == 'true'
-      run: 'echo "Version change found! New version: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
-
+    
     - name: Download compiled code from build
       uses: actions/download-artifact@v2
-      if: steps.check.outputs.changed == 'true'
       with:
         name: ts-artifact
         path: lib/
 
     - name: Set up Node.js for NPM
-      if: steps.check.outputs.changed == 'true'
       uses: actions/setup-node@v1
       with:
         node-version: '14.x'
-        registry-url: 'https://registry.npmjs.org'
-
-    - name: Install dependencies
-      if: steps.check.outputs.changed == 'true'
-      run: yarn install
-
-    - name: Publish package to NPM
-      if: steps.check.outputs.changed == 'true'
-      run: yarn publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    - name: Set up Node.js for GPR
-      if: steps.check.outputs.changed == 'true'
-      uses: actions/setup-node@v1
-      with:
         registry-url: 'https://npm.pkg.github.com'
 
+    - name: Install dependencies
+      run: yarn
+
     - name: Publish package to GPR
-      if: steps.check.outputs.changed == 'true'
       run: yarn publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
