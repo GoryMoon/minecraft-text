@@ -70,10 +70,21 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '14.x'
-        registry-url: 'https://npm.pkg.github.com'
+        registry-url: 'https://registry.npmjs.org'
 
     - name: Install dependencies
       run: yarn
+
+    - name: Publish package to NPM
+      run: yarn publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: Set up Node.js for GPR
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+        registry-url: 'https://npm.pkg.github.com'
 
     - name: Publish package to GPR
       run: yarn publish
