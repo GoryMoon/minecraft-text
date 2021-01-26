@@ -1,5 +1,7 @@
-### minecraft-text
-[![codecov](https://codecov.io/gh/GoryMoon/minecraft-text/branch/main/graph/badge.svg)](https://codecov.io/gh/GoryMoon/minecraft-text) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/GoryMoon/minecraft-text/Continuous%20Delivery?logo=github-actions&logoColor=ffffff)
+# @gorymoon/minecraft-text
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/gorymoon/minecraft-text?label=github%20version) ![npm (scoped)](https://img.shields.io/npm/v/@gorymoon/minecraft-text)
+[![codecov](https://codecov.io/gh/GoryMoon/minecraft-text/branch/main/graph/badge.svg)](https://codecov.io/gh/GoryMoon/minecraft-text) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/GoryMoon/minecraft-text/Continuous%20Delivery?logo=github-actions&logoColor=ffffff) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@gorymoon/minecraft-text)
 
 Parser and printer for Minecraft json text
 
