@@ -1,4 +1,6 @@
-import { BaseComponent } from '../component';
+import { describe, expect, test } from '@jest/globals';
+
+import { BaseComponent } from '../index';
 
 test('Empty base component', () => {
   const comp = new BaseComponent({});

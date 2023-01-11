@@ -1,16 +1,16 @@
-import { IComponent } from '../component';
-import { ITextComponent } from '../text/textComponent';
-import { TextParser } from '../text/textParser';
-import { TextPrinter } from '../text/textPrinter';
+import { expect, test } from '@jest/globals';
 
-test('Create new component', () => {
+import { IComponent } from '../component';
+import { ITextComponent, TextParser, TextPrinter } from '../text/index';
+
+test('create new component', () => {
   const comp: ITextComponent = {
     text: 'Test',
   };
   expect(comp.text).toBe('Test');
 });
 
-test('Create new component with base values', () => {
+test('create new component with base values', () => {
   const comp: ITextComponent = {
     text: 'Test',
     bold: true,
@@ -19,7 +19,7 @@ test('Create new component with base values', () => {
   expect(comp.bold).toBe(true);
 });
 
-test('Parse text component', () => {
+test('parse text component', () => {
   const parser = new TextParser();
 
   const comp = parser.parse({
@@ -30,13 +30,13 @@ test('Parse text component', () => {
   expect(comp.bold).toBe(true);
 });
 
-test('Parse empty text input', () => {
+test('parse empty text input', () => {
   const parser = new TextParser();
   const comp = parser.parse('');
   expect((comp as ITextComponent).text).toBe('');
 });
 
-test('Parse boolean bolean input', () => {
+test('parse boolean bolean input', () => {
   const parser = new TextParser();
   let comp = parser.parse(true);
   expect((comp as ITextComponent).text).toBe('true');
@@ -45,7 +45,7 @@ test('Parse boolean bolean input', () => {
   expect((comp as ITextComponent).text).toBe('false');
 });
 
-test('Parse number number input', () => {
+test('parse number number input', () => {
   const parser = new TextParser();
   let comp = parser.parse(5);
   expect((comp as ITextComponent).text).toBe('5');
@@ -57,7 +57,7 @@ test('Parse number number input', () => {
   expect((comp as ITextComponent).text).toBe('19000000000');
 });
 
-test('Parse null input', () => {
+test('parse null input', () => {
   const parser = new TextParser();
   let comp = parser.parse(null);
   expect((comp as ITextComponent).text).toBe('');
@@ -66,7 +66,7 @@ test('Parse null input', () => {
   expect((comp as ITextComponent).text).toBe('');
 });
 
-test('Can print', () => {
+test('can print', () => {
   const printer = new TextPrinter();
   const comp: ITextComponent = {
     text: 'Test',
@@ -74,7 +74,7 @@ test('Can print', () => {
   expect(printer.canPrint(comp)).toBe(true);
 });
 
-test('Can not print', () => {
+test('can not print', () => {
   const printer = new TextPrinter();
   const comp: IComponent = {};
   expect(printer.canPrint(comp)).toBe(false);

@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Wrapper and parser of minecraft text",
   "license": "MIT",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -11,7 +12,7 @@
     "dist/**/*"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.prod.json",
     "test": "jest",
     "coverage": "jest --collectCoverage",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -34,8 +35,8 @@
   "bugs": "https://github.com/GoryMoon/minecraft-text/issues",
   "homepage": "https://github.com/GoryMoon/minecraft-text",
   "devDependencies": {
+    "@jest/globals": "^29.3.1",
     "@tsconfig/recommended": "^1.0.1",
-    "@types/jest": "^29.2.5",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
