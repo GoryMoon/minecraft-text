@@ -1,7 +1,8 @@
-import { ITranslateComponent } from '../translate/translateComponent';
-import { TranslateParser } from '../translate/translateParser';
+import { expect, test } from '@jest/globals';
 
-test('Create new component', () => {
+import { ITranslateComponent, TranslateParser } from '../translate/index';
+
+test('create new component', () => {
   const comp: ITranslateComponent = {
     translate: 'test.test',
   };
@@ -9,7 +10,7 @@ test('Create new component', () => {
   expect(comp.with).toBe(undefined);
 });
 
-test('Create new component with replacement value', () => {
+test('create new component with replacement value', () => {
   const comp: ITranslateComponent = {
     translate: 'test.test',
     with: ['Data'],
@@ -18,7 +19,7 @@ test('Create new component with replacement value', () => {
   expect(comp.with).toEqual(['Data']);
 });
 
-test('Create new component with base values', () => {
+test('create new component with base values', () => {
   const comp: ITranslateComponent = {
     translate: 'test.test',
     bold: true,
@@ -39,7 +40,7 @@ test('Parse translate component', () => {
   expect(comp.bold).toBe(true);
 });
 
-test('Parse translate component with replacement value', () => {
+test('parse translate component with replacement value', () => {
   const parser = new TranslateParser();
 
   const comp = parser.parse({
@@ -52,7 +53,7 @@ test('Parse translate component with replacement value', () => {
   expect(comp.bold).toBe(true);
 });
 
-test('Parse empty text input', () => {
+test('parse empty text input', () => {
   const parser = new TranslateParser();
   const comp = parser.parse('');
   expect((comp as ITranslateComponent).translate).toBe('');

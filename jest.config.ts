@@ -1,9 +1,10 @@
-import { Config } from '@jest/types';
+import { JestConfigWithTsJest } from 'ts-jest';
 
-const config: Config.InitialOptions = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
-    extensionsToTreatAsEsm: ['.ts']
+const config: JestConfigWithTsJest = {
+    preset: 'ts-jest/presets/default-esm-legacy',
+    moduleNameMapper: {
+        '^(\\.{1,2}/.*)\\.js$': '$1',
+    },
 };
 
 export default config;
