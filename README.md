@@ -1,8 +1,8 @@
 # @gorymoon/minecraft-text
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/gorymoon/minecraft-text?label=github%20version) ![npm (scoped)](https://img.shields.io/npm/v/@gorymoon/minecraft-text)
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/gorymoon/minecraft-text?label=github%20version)](https://github.com/users/GoryMoon/packages/npm/package/minecraft-text) [![npm (scoped)](https://img.shields.io/npm/v/@gorymoon/minecraft-text)](https://www.npmjs.com/package/@gorymoon/minecraft-text)
 
-[![codecov](https://codecov.io/gh/GoryMoon/minecraft-text/branch/main/graph/badge.svg)](https://codecov.io/gh/GoryMoon/minecraft-text) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/GoryMoon/minecraft-text/Continuous%20Delivery?logo=github-actions&logoColor=ffffff) ![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@gorymoon/minecraft-text)
+[![codecov](https://codecov.io/gh/GoryMoon/minecraft-text/branch/main/graph/badge.svg)](https://codecov.io/gh/GoryMoon/minecraft-text) [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/GoryMoon/minecraft-text/cd.yml?logo=github-actions&logoColor=ffffff)](https://github.com/GoryMoon/minecraft-text/actions/workflows/cd.yml) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/@gorymoon/minecraft-text)](https://bundlephobia.com/package/@gorymoon/minecraft-text)
 
 Parser and printer for Minecraft json text
 
