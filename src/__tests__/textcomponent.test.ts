@@ -1,5 +1,7 @@
-import { IComponent } from '..';
-import { ITextComponent, TextParser, TextPrinter } from '../text';
+import { IComponent } from '../component';
+import { ITextComponent } from '../text/textComponent';
+import { TextParser } from '../text/textParser';
+import { TextPrinter } from '../text/textPrinter';
 
 test('Create new component', () => {
   const comp: ITextComponent = {
@@ -34,7 +36,7 @@ test('Parse empty text input', () => {
   expect((comp as ITextComponent).text).toBe('');
 });
 
-test('Parse boolean text input', () => {
+test('Parse boolean bolean input', () => {
   const parser = new TextParser();
   let comp = parser.parse(true);
   expect((comp as ITextComponent).text).toBe('true');
@@ -43,7 +45,7 @@ test('Parse boolean text input', () => {
   expect((comp as ITextComponent).text).toBe('false');
 });
 
-test('Parse number text input', () => {
+test('Parse number number input', () => {
   const parser = new TextParser();
   let comp = parser.parse(5);
   expect((comp as ITextComponent).text).toBe('5');

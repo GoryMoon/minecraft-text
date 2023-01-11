@@ -1,4 +1,5 @@
-import { ITranslateComponent, TranslateParser } from '../translate';
+import { ITranslateComponent } from '../translate/translateComponent';
+import { TranslateParser } from '../translate/translateParser';
 
 test('Create new component', () => {
   const comp: ITranslateComponent = {

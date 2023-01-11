@@ -1,4 +1,4 @@
-import { BaseComponent } from '..';
+import { BaseComponent } from '../component';
 
 test('Empty base component', () => {
   const comp = new BaseComponent({});

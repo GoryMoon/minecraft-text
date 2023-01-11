@@ -140,7 +140,8 @@ export class Converter {
    * @param key
    * @param val
    */
-  private jsonReviver(key: string, val: any): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private jsonReviver(this: void, key: string, val: any): any {
     if (boolValues.includes(key)) {
       return val === 'true';
     }
@@ -154,13 +155,16 @@ export class Converter {
    * @param key
    * @param val
    */
-  private jsonReplacer(key: string, val: any): any {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private jsonReplacer(this: void, key: string, val: any): any {
     if (boolValues.includes(key)) {
       return val ? String(val) : undefined;
     }
     if (
       (key === 'color' && val === 'default') ||
-      ((key === 'insertion' || key === 'extra') && val.length <= 0)
+      (((key === 'insertion' && typeof val === 'string') ||
+        (key === 'extra' && val instanceof Array)) &&
+        val.length <= 0)
     ) {
       return undefined;
     }
@@ -173,10 +177,11 @@ export class Converter {
    * Any primitives will be parsed as a text component.
    * @param input The input data to parse.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public parse(input: any): BaseComponent {
     if (typeof input === 'string' && input.length > 0) {
       try {
-        return this.parse(JSON.parse(input as string, this.jsonReviver));
+        return this.parse(JSON.parse(input, this.jsonReviver));
       } catch {
         try {
           return this.defaultTextParser.parse(input);
@@ -191,7 +196,7 @@ export class Converter {
       }
       return base;
     } else if (typeof input === 'object' && input !== null) {
-      let base = new BaseComponent(input);
+      let base = new BaseComponent(input as IComponent);
       for (const [key, parser] of this.options.parsers.entries()) {
         if (key in input) {
           base = parser.parse(input);
@@ -208,7 +213,7 @@ export class Converter {
     ) {
       return this.defaultTextParser.parse(input);
     }
-    throw new Error(`Trying to parse invalid data: ${input}`);
+    throw new Error(`Trying to parse invalid data: ${typeof input}`);
   }
 
   /**

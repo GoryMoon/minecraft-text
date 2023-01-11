@@ -1,6 +1,8 @@
-import { Converter } from '..';
-import { ITextComponent, TextParser, TextPrinter } from '../text';
-import { TranslateParser } from '../translate';
+import { Converter } from '../converter';
+import { ITextComponent } from '../text/textComponent';
+import { TextParser } from '../text/textParser';
+import { TextPrinter } from '../text/textPrinter';
+import { TranslateParser } from '../translate/translateParser';
 
 test('Converter default options', () => {
   const converter = new Converter();
