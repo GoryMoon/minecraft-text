@@ -8,7 +8,7 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "lib/**/*"
+    "dist/**/*"
   ],
   "scripts": {
     "build": "tsc",
