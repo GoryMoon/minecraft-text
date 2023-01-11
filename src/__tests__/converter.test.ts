@@ -196,10 +196,28 @@ test('Basic ToJSON output', () => {
   expect(converter.toJSON(comp)).toBe('{"text":"Test"}');
 });
 
-test('ToJSON output, with styles', () => {
+test('ToJSON output, with text styles', () => {
   const converter = new Converter();
   const comp = converter.parse('{"text": "Test", "bold": "true"}');
-  expect(converter.toJSON(comp)).toBe('{"bold":"true","text":"Test"}');
+  expect(converter.toJSON(comp)).toBe('{"bold":true,"text":"Test"}');
+});
+
+test('ToJSON output, with bool styles', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "bold": true}');
+  expect(converter.toJSON(comp)).toBe('{"bold":true,"text":"Test"}');
+});
+
+test('ToJSON output, with text unset styles', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "bold": "false"}');
+  expect(converter.toJSON(comp)).toBe('{"text":"Test"}');
+});
+
+test('ToJSON output, with bool unset styles', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "bold": false}');
+  expect(converter.toJSON(comp)).toBe('{"text":"Test"}');
 });
 
 test('Single ToString output', () => {
@@ -241,9 +259,15 @@ test('Basic ToString output, newline', () => {
   expect(converter.toString(comp)).toBe('Hello World!');
 });
 
-test('ToString output, with styles', () => {
+test('ToString output, with string styles', () => {
   const converter = new Converter();
   const comp = converter.parse('{"text": "Test", "bold": "true"}');
+  expect(converter.toString(comp)).toBe('Test');
+});
+
+test('ToString output, with bool styles', () => {
+  const converter = new Converter();
+  const comp = converter.parse('{"text": "Test", "bold": true}');
   expect(converter.toString(comp)).toBe('Test');
 });
 
@@ -290,10 +314,30 @@ test('ToHTML output set', () => {
   );
 });
 
+test('ToHTML output set, bool types', () => {
+  const converter = new Converter();
+  const comp = converter.parse(
+    '{"text": "Test", "color": "black", "bold": true, "italic": true, "underlined": true, "strikethrough": true}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="font-weight: bold; font-style: italic; text-decoration: underline line-through; color: #000000;">Test</span>'
+  );
+});
+
 test('ToHTML output unset', () => {
   const converter = new Converter();
   const comp = converter.parse(
     '{"text": "Test", "bold": "false", "italic": "false", "underlined": "false", "strikethrough": "false"}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span style="font-weight: normal; font-style: normal; text-decoration: none;">Test</span>'
+  );
+});
+
+test('ToHTML output unset, bool types', () => {
+  const converter = new Converter();
+  const comp = converter.parse(
+    '{"text": "Test", "bold": false, "italic": false, "underlined": false, "strikethrough": false}'
   );
   expect(converter.toHTML(comp)).toBe(
     '<span style="font-weight: normal; font-style: normal; text-decoration: none;">Test</span>'
@@ -314,7 +358,7 @@ test('Basic ToHTML output, classes', () => {
   expect(converter.toHTML(comp)).toBe('<span class="mc-black">Test</span>');
 });
 
-test('ToHTML output set, classes', () => {
+test('ToHTML output set, classes, string types', () => {
   const converter = new Converter({ useClasses: true });
   const comp = converter.parse(
     '{"text": "Test", "color": "black", "bold": "true", "italic": "true", "underlined": "true", "strikethrough": "true"}'
@@ -324,10 +368,30 @@ test('ToHTML output set, classes', () => {
   );
 });
 
-test('ToHTML output unset, classes', () => {
+test('ToHTML output set, classes, bool types', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse(
+    '{"text": "Test", "color": "black", "bold": true, "italic": true, "underlined": true, "strikethrough": true}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span class="mc-bold-set mc-italic-set mc-underlined-set mc-strikethrough-set mc-black">Test</span>'
+  );
+});
+
+test('ToHTML output unset, classes, string types', () => {
   const converter = new Converter({ useClasses: true });
   const comp = converter.parse(
     '{"text": "Test", "color": "black", "bold": "false", "italic": "false", "underlined": "false", "strikethrough": "false"}'
+  );
+  expect(converter.toHTML(comp)).toBe(
+    '<span class="mc-bold-unset mc-italic-unset mc-underlined-unset mc-strikethrough-unset mc-black">Test</span>'
+  );
+});
+
+test('ToHTML output unset, classes, bool types', () => {
+  const converter = new Converter({ useClasses: true });
+  const comp = converter.parse(
+    '{"text": "Test", "color": "black", "bold": false, "italic": false, "underlined": false, "strikethrough": false}'
   );
   expect(converter.toHTML(comp)).toBe(
     '<span class="mc-bold-unset mc-italic-unset mc-underlined-unset mc-strikethrough-unset mc-black">Test</span>'

@@ -142,7 +142,7 @@ export class Converter {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private jsonReviver(this: void, key: string, val: any): any {
-    if (boolValues.includes(key)) {
+    if (boolValues.includes(key) && typeof val === 'string') {
       return val === 'true';
     }
     return val;
@@ -150,15 +150,14 @@ export class Converter {
 
   /**
    * Replacer to transform for the JSON.stringify method
-   * Replaces boolean to string literals
    * Removes default values from the json
    * @param key
    * @param val
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private jsonReplacer(this: void, key: string, val: any): any {
-    if (boolValues.includes(key)) {
-      return val ? String(val) : undefined;
+    if (boolValues.includes(key) && typeof val === 'boolean') {
+      return val ? val : undefined;
     }
     if (
       (key === 'color' && val === 'default') ||
