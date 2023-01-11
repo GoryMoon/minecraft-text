@@ -13,6 +13,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "coverage": "jest --collectCoverage",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint .",
     "prepare": "yarn run build",

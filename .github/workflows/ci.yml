@@ -6,41 +6,48 @@ on:
 
 jobs:
   build:
-    name: Build typescript
+    name: Build and Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14, 16, 18]
+
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: '14'
+        node-version: ${{ matrix.node-version }}
 
-    - run: yarn install
-
-    - name: Compile code
-      run: yarn build
-
-
-  test:
-    name: Test and Coverage
-    needs: build
-    runs-on: 'ubuntu-latest'
-    
-    steps:
-    - uses: actions/checkout@v2
-
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-
-    - run: yarn install
+    - run: yarn install --frozen-lockfile
 
     - name: Run Linter
       run: yarn lint
 
+    - name: Compile code
+      run: yarn build
+
     - name: Run tests
       run: yarn test
+
+
+  test:
+    name: Coverage
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - run: yarn install --frozen-lockfile
+
+    - name: Run tests
+      run: yarn coverage
 
     - name: Upload Coverage
       uses: codecov/codecov-action@v1
