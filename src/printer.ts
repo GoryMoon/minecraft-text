@@ -67,7 +67,7 @@ function buildComponentStyles(comp: IComponent, converter: Converter): string {
     if (comp.underlined === false && comp.strikethrough === false) {
       style += ` none`;
     }
-    if (style !== '')styles.push(`text-decoration:${style};`);
+    if (style !== '') styles.push(`text-decoration:${style};`);
   }
   if (comp.color !== undefined) {
     let color = converter.options.styles.black;
