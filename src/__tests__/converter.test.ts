@@ -29,7 +29,7 @@ describe('option parsing', () => {
     expect(converter.options.styles.green).toBe('#55FF55');
     expect(converter.options.styles.aqua).toBe('#55FFFF');
     expect(converter.options.styles.red).toBe('#FF5555');
-    expect(converter.options.styles.lightPuple).toBe('#FF55FF');
+    expect(converter.options.styles.lightPurple).toBe('#FF55FF');
     expect(converter.options.styles.yellow).toBe('#FFFF55');
     expect(converter.options.styles.white).toBe('#FFFFFF');
     expect(converter.options.styles.minecoinGold).toBe('#DDD605');
@@ -52,7 +52,7 @@ describe('option parsing', () => {
     expect(converter.options.classes.green).toBe('green');
     expect(converter.options.classes.aqua).toBe('aqua');
     expect(converter.options.classes.red).toBe('red');
-    expect(converter.options.classes.lightPuple).toBe('light-purple');
+    expect(converter.options.classes.lightPurple).toBe('light-purple');
     expect(converter.options.classes.yellow).toBe('yellow');
     expect(converter.options.classes.white).toBe('white');
     expect(converter.options.classes.minecoinGold).toBe('minecoin-gold');
@@ -306,6 +306,60 @@ describe('toHTML outputs', () => {
     expect(converter.toHTML(comp)).toBe(out);
   });
 
+  describe('singular style', () => {
+    test.each([
+      {
+        name: 'set bold',
+        data: '{"text": "Test", "bold": true}',
+        out: '<span style="font-weight: bold;">Test</span>',
+      },
+      {
+        name: 'unset bold',
+        data: '{"text": "Test", "bold": false}',
+        out: '<span style="font-weight: normal;">Test</span>',
+      },
+      {
+        name: 'set italic',
+        data: '{"text": "Test", "italic": true}',
+        out: '<span style="font-style: italic;">Test</span>',
+      },
+      {
+        name: 'unset italic',
+        data: '{"text": "Test", "italic": false}',
+        out: '<span style="font-style: normal;">Test</span>',
+      },
+      {
+        name: 'set underlined',
+        data: '{"text": "Test", "underlined": true}',
+        out: '<span style="text-decoration: underline;">Test</span>',
+      },
+      {
+        name: 'unset underlined',
+        data: '{"text": "Test", "underlined": false}',
+        out: '<span>Test</span>',
+      },
+      {
+        name: 'set strikethrough',
+        data: '{"text": "Test", "strikethrough": true}',
+        out: '<span style="text-decoration: line-through;">Test</span>',
+      },
+      {
+        name: 'unset strikethrough',
+        data: '{"text": "Test", "strikethrough": false}',
+        out: '<span>Test</span>',
+      },
+      {
+        name: 'unset strikethrough and underline',
+        data: '{"text": "Test", "strikethrough": false, "underlined": false}',
+        out: '<span style="text-decoration: none;">Test</span>',
+      },
+    ])('$name ToHTML style', ({ data, out }) => {
+      const converter = new Converter();
+      const comp = converter.parse(data);
+      expect(converter.toHTML(comp)).toBe(out);
+    });
+  });
+
   test('ToHTML output, with undefined extra', () => {
     const converter = new Converter();
     const comp = {} as ITextComponent;
@@ -371,6 +425,59 @@ describe('toHTML outputs', () => {
     const converter = new Converter({ newline: newline });
     const comp = converter.parse(data);
     expect(converter.toHTML(comp)).toBe(out);
+  });
+
+  const defaultConverter = new Converter();
+  const classConverter = new Converter({ useClasses: true });
+  const s = defaultConverter.options.styles;
+  const c = defaultConverter.options.classes;
+
+  test.each([
+    ['black', s.black],
+    ['dark_blue', s.darkBlue],
+    ['dark_green', s.darkGreen],
+    ['dark_aqua', s.darkAqua],
+    ['dark_red', s.darkRed],
+    ['dark_purple', s.darkPurple],
+    ['gold', s.gold],
+    ['gray', s.gray],
+    ['dark_gray', s.darkGray],
+    ['blue', s.blue],
+    ['green', s.green],
+    ['aqua', s.aqua],
+    ['red', s.red],
+    ['light_purple', s.lightPurple],
+    ['yellow', s.yellow],
+    ['white', s.white],
+  ])('test color: %s -> %s', (data, out) => {
+    const comp = defaultConverter.parse(`{"color":"${data}","text":"Test"}`);
+    expect(defaultConverter.toHTML(comp)).toBe(
+      `<span style="color: ${out};">Test</span>`
+    );
+  });
+
+  test.each([
+    ['black', c.black],
+    ['dark_blue', c.darkBlue],
+    ['dark_green', c.darkGreen],
+    ['dark_aqua', c.darkAqua],
+    ['dark_red', c.darkRed],
+    ['dark_purple', c.darkPurple],
+    ['gold', c.gold],
+    ['gray', c.gray],
+    ['dark_gray', c.darkGray],
+    ['blue', c.blue],
+    ['green', c.green],
+    ['aqua', c.aqua],
+    ['red', c.red],
+    ['light_purple', c.lightPurple],
+    ['yellow', c.yellow],
+    ['white', c.white],
+  ])('test classes: %s -> %s', (data, out) => {
+    const comp = classConverter.parse(`{"color":"${data}","text":"Test"}`);
+    expect(classConverter.toHTML(comp)).toBe(
+      `<span class="mc-${out}">Test</span>`
+    );
   });
 });
 

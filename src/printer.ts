@@ -1,5 +1,6 @@
 import { IComponent } from './component';
 import { Converter } from './converter';
+import { camelToSnakeCase } from './utils';
 
 export interface IPrinter {
   /**
@@ -56,7 +57,7 @@ function buildComponentStyles(comp: IComponent, converter: Converter): string {
     );
   }
   if (comp.underlined !== undefined || comp.strikethrough !== undefined) {
-    let style = ``;
+    let style = '';
     if (comp.underlined === true) {
       style += ` ${converter.options.styles.underlined}`;
     }
@@ -66,7 +67,7 @@ function buildComponentStyles(comp: IComponent, converter: Converter): string {
     if (comp.underlined === false && comp.strikethrough === false) {
       style += ` none`;
     }
-    styles.push(`text-decoration:${style};`);
+    if (style !== '')styles.push(`text-decoration:${style};`);
   }
   if (comp.color !== undefined) {
     let color = converter.options.styles.black;
@@ -74,7 +75,7 @@ function buildComponentStyles(comp: IComponent, converter: Converter): string {
       color = comp.color;
     } else {
       const style = Object.entries(converter.options.styles).find(
-        (entry) => entry[0] === comp.color
+        (entry) => camelToSnakeCase(entry[0]) === comp.color
       );
       if (style !== undefined) {
         color = style[1];
@@ -113,7 +114,7 @@ function buildComponentClasses(comp: IComponent, converter: Converter): string {
 
   if (comp.color !== undefined && !comp.color.startsWith('#')) {
     const style = Object.entries(classOptions).find(
-      (entry) => entry[0] === comp.color
+      (entry) => camelToSnakeCase(entry[0]) === comp.color
     );
     let color = classOptions.black;
     if (style !== undefined) {
