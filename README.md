@@ -45,7 +45,7 @@ Default options for the `Converter` constructor
   - `green: '#55FF55'`
   - `aqua: '#55FFFF'`
   - `red: '#FF5555'`
-  - `lightPuple: '#FF55FF'`
+  - `lightPurple: '#FF55FF'`
   - `yellow: '#FFFF55'`
   - `white: '#FFFFFF'`
   - `minecoinGold: '#DDD605'`
@@ -68,7 +68,7 @@ Default options for the `Converter` constructor
   - `green: 'green'`
   - `aqua: 'aqua'`
   - `red: 'red'`
-  - `lightPuple: 'light-purple'`
+  - `lightPurple: 'light-purple'`
   - `yellow: 'yellow'`
   - `white: 'white'`
   - `minecoinGold: 'minecoin-gold'`
