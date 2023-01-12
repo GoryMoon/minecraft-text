@@ -18,7 +18,7 @@ type Styles = {
   green: string;
   aqua: string;
   red: string;
-  lightPuple: string;
+  lightPurple: string;
   yellow: string;
   white: string;
   minecoinGold: string;
@@ -83,7 +83,7 @@ export class Converter {
           green: '#55FF55',
           aqua: '#55FFFF',
           red: '#FF5555',
-          lightPuple: '#FF55FF',
+          lightPurple: '#FF55FF',
           yellow: '#FFFF55',
           white: '#FFFFFF',
           minecoinGold: '#DDD605',
@@ -107,7 +107,7 @@ export class Converter {
           green: 'green',
           aqua: 'aqua',
           red: 'red',
-          lightPuple: 'light-purple',
+          lightPurple: 'light-purple',
           yellow: 'yellow',
           white: 'white',
           minecoinGold: 'minecoin-gold',
